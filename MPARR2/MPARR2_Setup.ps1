@@ -80,15 +80,15 @@ HISTORY
   2023-09-22    G.Berdzik 	- Fixes
   2023-09-26    G.Berdzik 	- Fixes
   2023-09-27	S.Zamorano	- QA and some comments
-  2023-09-28    G.Berdzik   - Fixes
+  2023-09-28    G.Berdzik	- Fixes
   2023-10-02	S.Zamorano	- Fix some descriptions
   2023-10-03	S.Zamorano	- Added new tasks on task scheduler creation for supporting scripts (Users, Domains, Roles, Labels, SITs)
   2023-10-03	S.Zamorano	- Added digital signature for MPARR scripts
   2023-10-05	S.Zamorano	- Added comment in the configuration menu
   2023-10-20	S.Zamorano	- Folder selection added for Task Scheduler, permit to create or use existing.
-  
   2024-03-01	S.Zamorano	- Public release supporting all the new scripts for MPARR 2 
   2024-03-14	S.Zamorano	- Minor fixes related to sign scripts with extension psd1 and psm1 located on the ConfigFiles folder
+  2024-10-17	N.Briones	- Fix in Get-ChildItem to support multi-language 
 #>
 
 #------------------------------------------------------------------------------  
@@ -1283,7 +1283,7 @@ function SelfSignScripts
 		#Review if some certificate was installed previously
 		Write-Host "`nGetting Code Signing certificates..." -ForegroundColor Green
 		$i = 1
-		$certificates = @(Get-ChildItem Cert:\CurrentUser\My | Where-Object {$_.EnhancedKeyUsageList -like "*Code Signing*"}| Select-Object Subject, Thumbprint, NotBefore, NotAfter | ForEach-Object {$_ | Add-Member -Name "No" -MemberType NoteProperty -Value ($i++) -PassThru})
+		$certificates = @(Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert | Select-Object Subject, Thumbprint, NotBefore, NotAfter | ForEach-Object {$_ | Add-Member -Name "No" -MemberType NoteProperty -Value ($i++) -PassThru})
 		$certificates | Format-Table No, Subject, Thumbprint, NotBefore, NotAfter | Out-Host
 		
 		if ($certificates.Count -eq 0)
