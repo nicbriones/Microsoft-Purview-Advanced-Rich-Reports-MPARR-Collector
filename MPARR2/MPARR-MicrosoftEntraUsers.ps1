@@ -52,20 +52,21 @@ HISTORY
 	Author      : S. Zamorano
 	Version     : 2.0.5
 	Description : The script exports Microsoft Entra users from Microsoft Graph and pushes into a customer-specified Log Analytics table. Please note if you change the name of the table - you need to update Workbook sample that displays the report , appropriately. Do ensure the older table is deleted before creating the new table - it will create duplicates and Log analytics workspace doesn't support upserts or updates.
-	2022-10-12		S. Zamorano		- Added laconfig.json file for configuration and decryption Function
-	2022-10-18		G. Berdzik		- Fix licensing information
-	2023-01-03		S. Zamorano		- Added Change to use beta API capabilities, added Id for users
-	2023-03-31      G. Berdzik      - Support for large tenants
-	2023-03-31		S. Zamorano		- Visual improvement for progress
-	2023-10-02		S. Zamorano		- Fix Progress bar
-	2023-10-24		S. Zamorano		- Added Microsoft Entra filter option
-	2023-11-07		S. Zamorano		- Added attribute to skip decision and use as a task
-	2023-11-27		S. Zamorano		- Added Microsoft_EntraIDUsers.json file to select the Attributes required per user, added function PowerShell version check
+	2022-10-12	S. Zamorano		- Added laconfig.json file for configuration and decryption Function
+	2022-10-18	G. Berdzik		- Fix licensing information
+	2023-01-03	S. Zamorano		- Added Change to use beta API capabilities, added Id for users
+	2023-03-31      G. Berdzik		- Support for large tenants
+	2023-03-31	S. Zamorano		- Visual improvement for progress
+	2023-10-02	S. Zamorano		- Fix Progress bar
+	2023-10-24	S. Zamorano		- Added Microsoft Entra filter option
+	2023-11-07	S. Zamorano		- Added attribute to skip decision and use as a task
+	2023-11-27	S. Zamorano		- Added Microsoft_EntraIDUsers.json file to select the Attributes required per user, added function PowerShell version check
 
-	07-02-2024		S. Zamorano		- First release
-	07-02-2024		S. Zamorano		- Added EventHub connector
-	12-02-2024		S. Zamorano		- New version released
-	01-03-2024		S. Zamorano		- Public release
+	07-02-2024	S. Zamorano		- First release
+	07-02-2024	S. Zamorano		- Added EventHub connector
+	12-02-2024	S. Zamorano		- New version released
+	01-03-2024	S. Zamorano		- Public release
+  	18-10-2024	N.Briones		- Fix Get-ChildItem call to support multi-language
 #>
 
 using module "ConfigFiles\MPARRUtils.psm1"
@@ -104,7 +105,7 @@ function CheckPowerShellVersion
 function CheckCertificateInstalled($thumbprint)
 {
 	$var = "False"
-	$certificates = @(Get-ChildItem Cert:\CurrentUser\My | Where-Object {$_.EnhancedKeyUsageList -like "*Client Authentication*"}| Select-Object Thumbprint) 
+	$certificates = @(Get-ChildItem Cert:\CurrentUser\My -SSLServerAuthentication | Select-Object Thumbprint) 
 	#$thumbprint -in $certificates
 	foreach($certificate in $certificates)
 	{
