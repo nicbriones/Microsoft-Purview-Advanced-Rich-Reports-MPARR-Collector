@@ -58,6 +58,7 @@ Description : The script exports Microsoft Entra Domains registered from Microso
 	07-02-2024	S. Zamorano		- Added EventHub connector
 	12-02-2024	S. Zamorano		- New version released
 	01-03-2024	S. Zamorano		- Public release
+ 	18-10-2024	N.Briones		- Fix Get-ChildItem call to support multi-language
 #>
 
 using module "ConfigFiles\MPARRUtils.psm1"
@@ -95,7 +96,7 @@ function CheckPowerShellVersion
 function CheckCertificateInstalled($thumbprint)
 {
 	$var = "False"
-	$certificates = @(Get-ChildItem Cert:\CurrentUser\My | Where-Object {$_.EnhancedKeyUsageList -like "*Client Authentication*"}| Select-Object Thumbprint) 
+	$certificates = @(Get-ChildItem Cert:\CurrentUser\My -SSLServerAuthentication | Select-Object Thumbprint) 
 	#$thumbprint -in $certificates
 	foreach($certificate in $certificates)
 	{
